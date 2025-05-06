@@ -12,7 +12,11 @@ const PreviewPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { getResumeById } = useResume();
-  const [resume, setResume] = useState(getResumeById(id || ''));
+  const resumeWithTemplate = getResumeById(id || '');
+  const [resume, setResume] = useState(resumeWithTemplate ? {
+    ...resumeWithTemplate,
+    templateId: resumeWithTemplate.templateId || 'template-b'
+  } : undefined);
   const { exportToPdf, isExporting } = usePdfExport();
 
   useEffect(() => {
@@ -28,7 +32,11 @@ const PreviewPage = () => {
       return;
     }
 
-    setResume(resumeData);
+    // Ensure templateId exists
+    setResume({
+      ...resumeData,
+      templateId: resumeData.templateId || 'template-b'
+    });
   }, [id, getResumeById, navigate]);
 
   const handleDownload = () => {

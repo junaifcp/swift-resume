@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 export type ExperienceItem = {
@@ -27,6 +26,8 @@ export type SkillItem = {
   proficiency: number;
 };
 
+export type Template = 'template-a' | 'template-b';
+
 export type Resume = {
   id: string;
   name: string;
@@ -41,6 +42,8 @@ export type Resume = {
   education: EducationItem[];
   skills: SkillItem[];
   lastUpdated: string;
+  templateId: Template;
+  profileImage?: string;
 };
 
 type ResumeContextType = {
@@ -67,6 +70,7 @@ const defaultResume: Resume = {
   education: [],
   skills: [],
   lastUpdated: '',
+  templateId: 'template-b', // Default template is text-only
 };
 
 const ResumeContext = createContext<ResumeContextType>({

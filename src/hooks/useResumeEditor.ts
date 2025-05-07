@@ -1,0 +1,127 @@
+
+import { useState, useEffect } from 'react';
+import { useResume, Resume, Template } from '@/context/ResumeContext';
+import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
+
+export const useResumeEditor = (id: string | undefined, navigate: (path: string) => void) => {
+  const { getResumeById, updateResume: saveResume, currentResumeId, setCurrentResumeId } = useResume();
+  const [activeTab, setActiveTab] = useState('basic-info');
+  const [showPreview, setShowPreview] = useState(true);
+  const [isDirty, setIsDirty] = useState(false);
+  const { toast: uiToast } = useToast();
+  const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
+  
+  // If templateId is missing in the resume data, default to template-b
+  const resumeWithTemplate = getResumeById(id || '');
+  const [resumeData, setResumeData] = useState(resumeWithTemplate ? {
+    ...resumeWithTemplate,
+    templateId: resumeWithTemplate.templateId || 'template-b'
+  } : undefined);
+
+  useEffect(() => {
+    if (!id) {
+      navigate('/dashboard');
+      return;
+    }
+
+    const resume = getResumeById(id);
+    if (!resume) {
+      uiToast({
+        title: "Resume not found",
+        description: "The resume you're looking for doesn't exist.",
+      });
+      navigate('/dashboard');
+      return;
+    }
+
+    // Ensure templateId exists
+    const resumeWithTemplate = {
+      ...resume,
+      templateId: resume.templateId || 'template-b'
+    };
+
+    setResumeData(resumeWithTemplate);
+    setCurrentResumeId(id);
+  }, [id, getResumeById, navigate, setCurrentResumeId]);
+
+  useEffect(() => {
+    // Reset "dirty" state when changing tabs
+    if (resumeData && !isDirty) {
+      const resume = getResumeById(id || '');
+      if (resume) {
+        setResumeData({
+          ...resume,
+          templateId: resume.templateId || 'template-b'
+        });
+      }
+    }
+  }, [activeTab]);
+
+  const updateResume = (data: Partial<Resume>) => {
+    if (!resumeData) return;
+    
+    const updatedResume = { ...resumeData, ...data };
+    setResumeData(updatedResume);
+    setIsDirty(true);
+  };
+
+  const handleSaveChanges = () => {
+    if (resumeData) {
+      saveResume(resumeData);
+      setIsDirty(false);
+      uiToast({
+        title: "Changes saved",
+        description: "Your resume has been updated successfully."
+      });
+    }
+  };
+
+  const togglePreview = () => {
+    setShowPreview(!showPreview);
+  };
+
+  const handleTemplateChange = (template: Template) => {
+    if (!resumeData) return;
+
+    const updatedResume = { 
+      ...resumeData, 
+      templateId: template 
+    };
+    setResumeData(updatedResume);
+    setIsDirty(true);
+    setTemplateDialogOpen(false);
+    
+    let templateName = "";
+    switch (template) {
+      case 'template-a':
+        templateName = 'Template A';
+        break;
+      case 'template-b':
+        templateName = 'Template B';
+        break;
+      case 'template-c':
+        templateName = 'Template C (ATS-Friendly)';
+        break;
+      case 'template-d':
+        templateName = 'Template D (Plain)';
+        break;
+    }
+    
+    toast.success(`Template updated—your resume now uses ${templateName}.`);
+  };
+
+  return {
+    resumeData,
+    activeTab,
+    setActiveTab,
+    showPreview,
+    togglePreview,
+    isDirty,
+    updateResume,
+    handleSaveChanges,
+    templateDialogOpen,
+    setTemplateDialogOpen,
+    handleTemplateChange
+  };
+};

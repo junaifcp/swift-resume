@@ -108,7 +108,24 @@ const ResumeEditor = () => {
     setResumeData(updatedResume);
     setIsDirty(true);
     setTemplateDialogOpen(false);
-    toast.success(`Template updated—your resume now uses ${template === 'template-a' ? 'Template A' : 'Template B'}.`);
+    
+    let templateName = "";
+    switch (template) {
+      case 'template-a':
+        templateName = 'Template A';
+        break;
+      case 'template-b':
+        templateName = 'Template B';
+        break;
+      case 'template-c':
+        templateName = 'Template C (ATS-Friendly)';
+        break;
+      case 'template-d':
+        templateName = 'Template D (Plain)';
+        break;
+    }
+    
+    toast.success(`Template updated—your resume now uses ${templateName}.`);
   };
 
   const handleProfileImageChange = (imageBase64: string | undefined) => {
@@ -245,7 +262,13 @@ const ResumeEditor = () => {
                 <div className="mb-4 flex justify-between items-center">
                   <h2 className="text-lg font-medium">Preview</h2>
                   <span className="text-sm text-muted-foreground">
-                    {resumeData.templateId === 'template-a' ? 'Template A' : 'Template B'}
+                    {resumeData.templateId === 'template-a' 
+                      ? 'Template A' 
+                      : resumeData.templateId === 'template-b' 
+                      ? 'Template B'
+                      : resumeData.templateId === 'template-c' 
+                      ? 'Template C (ATS-Friendly)'
+                      : 'Template D (Plain)'}
                   </span>
                 </div>
                 <div className="animate-fade-in">

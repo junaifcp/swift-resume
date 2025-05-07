@@ -49,6 +49,21 @@ const PreviewPage = () => {
     return <div>Loading...</div>;
   }
 
+  const getTemplateLabel = () => {
+    switch (resume.templateId) {
+      case 'template-a':
+        return 'Template A';
+      case 'template-b':
+        return 'Template B';
+      case 'template-c':
+        return 'Template C (ATS-Friendly)';
+      case 'template-d':
+        return 'Template D (Plain)';
+      default:
+        return 'Template B';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -61,6 +76,9 @@ const PreviewPage = () => {
           <h1 className="font-mono text-lg md:text-xl font-bold">
             {resume.name}
           </h1>
+          <span className="text-sm text-muted-foreground hidden md:inline-block">
+            {getTemplateLabel()}
+          </span>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" asChild className="flex items-center gap-2">

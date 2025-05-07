@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 export type ExperienceItem = {
@@ -26,7 +27,7 @@ export type SkillItem = {
   proficiency: number;
 };
 
-export type Template = 'template-a' | 'template-b';
+export type Template = 'template-a' | 'template-b' | 'template-c' | 'template-d';
 
 export type Resume = {
   id: string;

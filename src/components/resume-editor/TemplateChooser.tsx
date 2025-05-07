@@ -79,6 +79,66 @@ const TemplateChooser = ({ selectedTemplate, onSelectTemplate }: TemplateChooser
             Template B (Text-Only Header)
           </div>
         </div>
+
+        <div 
+          className={`relative border-2 rounded-md overflow-hidden cursor-pointer hover:border-primary transition-all ${
+            selectedTemplate === 'template-c' ? 'border-primary ring-2 ring-primary/20' : 'border-gray-200'
+          }`}
+          onClick={() => onSelectTemplate('template-c')}
+        >
+          {selectedTemplate === 'template-c' && (
+            <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1">
+              <Check size={16} />
+            </div>
+          )}
+          <div className="p-4 bg-gray-50 aspect-[3/4]">
+            <div className="bg-white h-full rounded shadow-sm p-3">
+              {/* Template C Preview */}
+              <div className="p-3 bg-blue-500 text-white rounded">
+                <div className="h-4 bg-white/30 rounded mb-2"></div>
+                <div className="h-3 bg-white/20 rounded w-5/6"></div>
+              </div>
+              <div className="mt-3 space-y-2">
+                <div className="h-2 bg-gray-200 rounded w-full"></div>
+                <div className="h-2 bg-gray-200 rounded w-full"></div>
+                <div className="h-2 bg-gray-200 rounded w-full"></div>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 text-center font-medium">
+            Template C (ATS-Friendly)
+          </div>
+        </div>
+
+        <div 
+          className={`relative border-2 rounded-md overflow-hidden cursor-pointer hover:border-primary transition-all ${
+            selectedTemplate === 'template-d' ? 'border-primary ring-2 ring-primary/20' : 'border-gray-200'
+          }`}
+          onClick={() => onSelectTemplate('template-d')}
+        >
+          {selectedTemplate === 'template-d' && (
+            <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1">
+              <Check size={16} />
+            </div>
+          )}
+          <div className="p-4 bg-gray-50 aspect-[3/4]">
+            <div className="bg-white h-full rounded shadow-sm p-3">
+              {/* Template D Preview */}
+              <div className="p-2 border-b border-gray-200">
+                <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                <div className="h-3 bg-gray-200 rounded w-5/6"></div>
+              </div>
+              <div className="mt-3 space-y-2">
+                <div className="h-2 bg-gray-200 rounded w-full"></div>
+                <div className="h-2 bg-gray-200 rounded w-5/6"></div>
+                <div className="h-2 bg-gray-200 rounded w-4/6"></div>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 text-center font-medium">
+            Template D (Plain, No Sidebar & No Image)
+          </div>
+        </div>
       </div>
     </div>
   );

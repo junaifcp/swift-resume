@@ -161,7 +161,8 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
       // If authenticated, create resume in Strapi
       if (isAuthenticated && strapiUserId) {
         const service = useMockMode ? strapiService.mock : strapiService;
-        const strapiResume = await service.createResume(newResume, strapiUserId);
+        // Pass the strapiUserId as string to avoid type error
+        const strapiResume = await service.createResume(newResume, String(strapiUserId));
         
         if (strapiResume) {
           createdResume = strapiResume;

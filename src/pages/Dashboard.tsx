@@ -9,34 +9,48 @@ import {
   Trash2, 
   Edit,
   Plus,
-  FileText
+  FileText,
+  Loader2
 } from 'lucide-react';
 import { useResume } from '@/context/ResumeContext';
+import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { usePdfExport } from '@/hooks/usePdfExport';
+import { UserButton } from '@clerk/clerk-react';
 
 const Dashboard = () => {
-  const { resumes, createResume, deleteResume } = useResume();
+  const { resumes, createResume, deleteResume, isLoading: isResumesLoading } = useResume();
+  const { signOut } = useAuth();
   const navigate = useNavigate();
   const { exportToPdf, isExporting } = usePdfExport();
 
-  const handleCreateResume = () => {
-    const newResume = createResume();
-    navigate(`/editor/${newResume.id}`);
-    toast.success('New resume created');
+  const handleCreateResume = async () => {
+    try {
+      const newResume = await createResume();
+      navigate(`/editor/${newResume.id}`);
+      toast.success('New resume created');
+    } catch (error) {
+      toast.error('Failed to create resume');
+    }
   };
 
-  const handleDeleteResume = (id: string, name: string, event: React.MouseEvent) => {
+  const handleDeleteResume = async (id: string, name: string, event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
     
     // Confirm before deleting
     if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
-      deleteResume(id);
-      toast.success('Resume deleted successfully');
+      try {
+        await deleteResume(id);
+        toast.success('Resume deleted successfully');
+      } catch (error) {
+        toast.error('Failed to delete resume');
+      }
     }
   };
+
+  const isLoading = isResumesLoading;
 
   return (
     <div className="min-h-screen bg-background">
@@ -48,11 +62,12 @@ const Dashboard = () => {
             <span className="font-mono text-xl">Resume</span>
           </Link>
         </div>
-        <div>
+        <div className="flex items-center gap-4">
           <Button onClick={handleCreateResume} className="flex items-center gap-2">
             <Plus size={16} />
             <span>New Resume</span>
           </Button>
+          <UserButton afterSignOutUrl="/" />
         </div>
       </header>
 
@@ -65,7 +80,11 @@ const Dashboard = () => {
           </p>
         </div>
 
-        {resumes.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center py-16">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : resumes.length === 0 ? (
           <div className="text-center py-16">
             <div className="flex justify-center mb-4">
               <FileText size={64} className="text-muted-foreground/50" />

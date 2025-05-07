@@ -1,8 +1,52 @@
-# Welcome to your Lovable project
+
+# Swift Resume Builder
+
+An AI-powered Resume Builder with Clerk authentication and Strapi backend persistence.
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/05983d66-a871-4036-bf60-8b6cb4bcf7d7
+
+## Setup Instructions
+
+### Environment Variables
+
+This project requires environment variables to work correctly. Create a `.env` file at the root of the project with the following variables:
+
+```sh
+# Clerk Authentication
+VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+
+# Strapi API
+VITE_STRAPI_API_URL=http://localhost:1337
+```
+
+### Clerk Authentication Setup
+
+1. Sign up for a Clerk account at [https://clerk.dev](https://clerk.dev)
+2. Create a new application in the Clerk dashboard
+3. Copy your Publishable Key from the Clerk dashboard
+4. Add the key to your `.env` file as `VITE_CLERK_PUBLISHABLE_KEY`
+
+### Strapi Backend Setup
+
+#### Option 1: Run Strapi locally
+
+1. Install Strapi globally: `npm install -g @strapi/cli`
+2. Create a new Strapi project: `strapi new resume-backend --quickstart`
+3. Start the Strapi server: `cd resume-backend && npm run develop`
+
+#### Option 2: Use a hosted Strapi instance
+
+1. Deploy Strapi to your preferred hosting provider
+2. Update the `VITE_STRAPI_API_URL` in your `.env` file to point to your hosted instance
+
+#### Configure Content Types
+
+1. In the Strapi admin panel, create the following Content Types:
+   - **User**: id (auto-generated), clerkUserId (text), name (text), email (email)
+   - **Resume**: id (auto-generated), user (relation to User), templateId (text), basicInfo (json), sections (json)
+2. Set appropriate permissions for these Content Types in Settings > Roles
 
 ## How can I edit this code?
 
@@ -59,6 +103,8 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+- Clerk (Authentication)
+- Strapi (Backend)
 
 ## How can I deploy this project?
 

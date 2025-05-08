@@ -1,7 +1,9 @@
 import axios from "axios";
 import { Resume } from "@/context/ResumeContext";
 
-const API_URL = import.meta.env.VITE_STRAPI_API_URL || "http://localhost:1337";
+const API_URL =
+  import.meta.env.VITE_STRAPI_API_URL ||
+  "https://84cd-103-199-162-147.ngrok-free.app";
 
 // Types for Strapi data
 export interface StrapiUser {

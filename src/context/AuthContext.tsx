@@ -1,8 +1,13 @@
-
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useClerk, useUser } from '@clerk/clerk-react';
-import { strapiService, StrapiUser } from '@/services/strapiService';
-import { useToast } from '@/components/ui/use-toast';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { useClerk, useUser } from "@clerk/clerk-react";
+import { strapiService, StrapiUser } from "@/services/strapiService";
+import { useToast } from "@/components/ui/use-toast";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -31,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Check if we are using mock mode (no Strapi server)
   const useMockMode = !import.meta.env.VITE_STRAPI_API_URL;
-  
+
   useEffect(() => {
     const fetchOrCreateStrapiUser = async () => {
       if (!isLoaded || !isSignedIn || !user) {
@@ -41,33 +46,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       try {
         setIsLoadingStrapi(true);
-        
+
         // Use real or mock service based on environment
         const service = useMockMode ? strapiService.mock : strapiService;
-        
+
         // Try to fetch existing Strapi user
         let existingStrapiUser = await service.getUserByClerkId(user.id);
-        
+
         // If user doesn't exist, create one
         if (!existingStrapiUser) {
           existingStrapiUser = await service.createUser({
             clerkUserId: user.id,
-            name: `${user.firstName} ${user.lastName}`.trim() || user.username || 'User',
-            email: user.primaryEmailAddress?.emailAddress || '',
+            name:
+              `${user.firstName} ${user.lastName}`.trim() ||
+              user.username ||
+              "User",
+            email: user.primaryEmailAddress?.emailAddress || "",
           });
-          
+
           toast({
             title: "Welcome!",
             description: "Your account has been created successfully.",
           });
         }
-        
+        console.log("👉 Using Strapi AppUser ID:", existingStrapiUser.id);
         setStrapiUser(existingStrapiUser);
       } catch (error) {
         console.error("Error fetching/creating Strapi user:", error);
         toast({
           title: "Error",
-          description: "There was an error setting up your account. Please try again.",
+          description:
+            "There was an error setting up your account. Please try again.",
           variant: "destructive",
         });
       } finally {

@@ -1,8 +1,13 @@
-
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { strapiService } from '@/services/strapiService';
-import { useAuth } from '@/context/AuthContext';
-import { toast } from 'sonner';
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import { strapiService } from "@/services/strapiService";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 export type ExperienceItem = {
   id: string;
@@ -30,7 +35,11 @@ export type SkillItem = {
   proficiency: number;
 };
 
-export type Template = 'template-a' | 'template-b' | 'template-c' | 'template-d';
+export type Template =
+  | "template-a"
+  | "template-b"
+  | "template-c"
+  | "template-d";
 
 export type Resume = {
   id: string;
@@ -63,20 +72,20 @@ type ResumeContextType = {
 };
 
 const defaultResume: Resume = {
-  id: '',
-  name: '',
-  title: '',
-  email: '',
-  phone: '',
-  location: '',
-  website: '',
-  summary: '',
-  themeColor: '#0EA5E9',
+  id: "",
+  name: "",
+  title: "",
+  email: "",
+  phone: "",
+  location: "",
+  website: "",
+  summary: "",
+  themeColor: "#0EA5E9",
   experiences: [],
   education: [],
   skills: [],
-  lastUpdated: '',
-  templateId: 'template-b',
+  lastUpdated: "",
+  templateId: "template-b",
 };
 
 const ResumeContext = createContext<ResumeContextType>({
@@ -97,7 +106,8 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
   const [currentResumeId, setCurrentResumeId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { isAuthenticated, strapiUserId, isLoading: isAuthLoading } = useAuth();
-  
+  console.log("strapiUserId", strapiUserId);
+
   // Check if we are using mock mode (no Strapi server)
   const useMockMode = !import.meta.env.VITE_STRAPI_API_URL;
 
@@ -105,124 +115,131 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const loadResumes = async () => {
       if (isAuthLoading) return;
-      
+
       try {
         setIsLoading(true);
-        
+
         if (isAuthenticated && strapiUserId) {
           // Use either real or mock service based on environment
           const service = useMockMode ? strapiService.mock : strapiService;
-          
+
           // Fetch resumes from Strapi
           const fetchedResumes = await service.getResumesByUserId(strapiUserId);
           setResumes(fetchedResumes);
         } else {
           // If not authenticated, load from localStorage as fallback
-          const savedResumes = localStorage.getItem('resumes');
+          const savedResumes = localStorage.getItem("resumes");
           setResumes(savedResumes ? JSON.parse(savedResumes) : []);
         }
       } catch (error) {
-        console.error('Error loading resumes:', error);
-        toast.error('Failed to load your resumes. Please try again.');
-        
+        console.error("Error loading resumes:", error);
+        toast.error("Failed to load your resumes. Please try again.");
+
         // Fallback to localStorage
-        const savedResumes = localStorage.getItem('resumes');
+        const savedResumes = localStorage.getItem("resumes");
         setResumes(savedResumes ? JSON.parse(savedResumes) : []);
       } finally {
         setIsLoading(false);
       }
     };
-    
+
     loadResumes();
   }, [isAuthenticated, strapiUserId, isAuthLoading, useMockMode]);
 
   const saveResumesToStorage = (updatedResumes: Resume[]) => {
     // Only save to localStorage if not authenticated
     if (!isAuthenticated) {
-      localStorage.setItem('resumes', JSON.stringify(updatedResumes));
+      localStorage.setItem("resumes", JSON.stringify(updatedResumes));
     }
   };
 
   const getResumeById = (id: string) => {
-    return resumes.find(resume => resume.id === id);
+    return resumes.find((resume) => resume.id === id);
   };
 
   const createResume = async (): Promise<Resume> => {
     const newResume: Resume = {
       ...defaultResume,
       id: `resume-${Date.now()}`,
-      name: 'Untitled Resume',
+      name: "Untitled Resume",
       lastUpdated: new Date().toISOString(),
     };
-    
+
     try {
       let createdResume = newResume;
-      
+
       // If authenticated, create resume in Strapi
       if (isAuthenticated && strapiUserId) {
         const service = useMockMode ? strapiService.mock : strapiService;
         // Pass the strapiUserId as string to avoid type error
-        const strapiResume = await service.createResume(newResume, String(strapiUserId));
-        
+        // const strapiResume = await service.createResume(newResume, String(strapiUserId));
+        const strapiResume = await service.createResume(
+          newResume,
+          strapiUserId
+        );
+
         if (strapiResume) {
           createdResume = strapiResume;
         }
       }
-      
+
       const updatedResumes = [...resumes, createdResume];
       setResumes(updatedResumes);
       saveResumesToStorage(updatedResumes);
       setCurrentResumeId(createdResume.id);
-      
+
       return createdResume;
     } catch (error) {
-      console.error('Error creating resume:', error);
-      toast.error('Failed to create a new resume. Please try again.');
-      
+      console.error("Error creating resume:", error);
+      toast.error("Failed to create a new resume. Please try again.");
+
       // Fallback to local creation
       const updatedResumes = [...resumes, newResume];
       setResumes(updatedResumes);
       saveResumesToStorage(updatedResumes);
       setCurrentResumeId(newResume.id);
-      
+
       return newResume;
     }
   };
 
   const updateResume = async (resumeData: Resume): Promise<void> => {
     try {
-      let updatedResume = { 
-        ...resumeData, 
-        lastUpdated: new Date().toISOString() 
+      let updatedResume = {
+        ...resumeData,
+        lastUpdated: new Date().toISOString(),
       };
-      
+
       // If authenticated, update in Strapi
       if (isAuthenticated && strapiUserId && resumeData.strapiId) {
         const service = useMockMode ? strapiService.mock : strapiService;
-        const strapiResume = await service.updateResume(resumeData, resumeData.strapiId);
-        
+        const strapiResume = await service.updateResume(
+          resumeData,
+          resumeData.strapiId
+        );
+
         if (strapiResume) {
           updatedResume = strapiResume;
         }
       }
-      
-      const updatedResumes = resumes.map(resume => 
+
+      const updatedResumes = resumes.map((resume) =>
         resume.id === resumeData.id ? updatedResume : resume
       );
-      
+
       setResumes(updatedResumes);
       saveResumesToStorage(updatedResumes);
     } catch (error) {
-      console.error('Error updating resume:', error);
-      toast.error('Failed to save changes. Please try again.');
-      
+      console.error("Error updating resume:", error);
+      toast.error("Failed to save changes. Please try again.");
+
       // Update locally even if Strapi fails
-      const updatedResumes = resumes.map(resume => 
-        resume.id === resumeData.id 
-          ? { ...resumeData, lastUpdated: new Date().toISOString() } 
+      const updatedResumes = resumes.map((resume) =>
+        resume.id === resumeData.id
+          ? { ...resumeData, lastUpdated: new Date().toISOString() }
           : resume
       );
-      
+
       setResumes(updatedResumes);
       saveResumesToStorage(updatedResumes);
     }
@@ -230,30 +247,30 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 
   const deleteResume = async (id: string): Promise<void> => {
     try {
-      const resumeToDelete = resumes.find(resume => resume.id === id);
-      
+      const resumeToDelete = resumes.find((resume) => resume.id === id);
+
       // If authenticated and resume has strapiId, delete from Strapi
       if (isAuthenticated && resumeToDelete?.strapiId) {
         const service = useMockMode ? strapiService.mock : strapiService;
         await service.deleteResume(resumeToDelete.strapiId);
       }
-      
-      const updatedResumes = resumes.filter(resume => resume.id !== id);
+
+      const updatedResumes = resumes.filter((resume) => resume.id !== id);
       setResumes(updatedResumes);
       saveResumesToStorage(updatedResumes);
-      
+
       if (currentResumeId === id) {
         setCurrentResumeId(null);
       }
     } catch (error) {
-      console.error('Error deleting resume:', error);
-      toast.error('Failed to delete resume. Please try again.');
-      
+      console.error("Error deleting resume:", error);
+      toast.error("Failed to delete resume. Please try again.");
+
       // Delete locally even if Strapi fails
-      const updatedResumes = resumes.filter(resume => resume.id !== id);
+      const updatedResumes = resumes.filter((resume) => resume.id !== id);
       setResumes(updatedResumes);
       saveResumesToStorage(updatedResumes);
-      
+
       if (currentResumeId === id) {
         setCurrentResumeId(null);
       }

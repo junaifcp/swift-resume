@@ -16,7 +16,9 @@ export const useResumeEditor = (id: string | undefined, navigate: (path: string)
   const resumeWithTemplate = getResumeById(id || '');
   const [resumeData, setResumeData] = useState(resumeWithTemplate ? {
     ...resumeWithTemplate,
-    templateId: resumeWithTemplate.templateId || 'template-b'
+    templateId: resumeWithTemplate.templateId || 'template-b',
+    projects: resumeWithTemplate.projects || [],
+    declaration: resumeWithTemplate.declaration || ''
   } : undefined);
 
   useEffect(() => {
@@ -35,13 +37,15 @@ export const useResumeEditor = (id: string | undefined, navigate: (path: string)
       return;
     }
 
-    // Ensure templateId exists
-    const resumeWithTemplate = {
+    // Ensure required fields exist
+    const resumeWithDefaults = {
       ...resume,
-      templateId: resume.templateId || 'template-b'
+      templateId: resume.templateId || 'template-b',
+      projects: resume.projects || [],
+      declaration: resume.declaration || ''
     };
 
-    setResumeData(resumeWithTemplate);
+    setResumeData(resumeWithDefaults);
     setCurrentResumeId(id);
   }, [id, getResumeById, navigate, setCurrentResumeId]);
 
@@ -52,7 +56,9 @@ export const useResumeEditor = (id: string | undefined, navigate: (path: string)
       if (resume) {
         setResumeData({
           ...resume,
-          templateId: resume.templateId || 'template-b'
+          templateId: resume.templateId || 'template-b',
+          projects: resume.projects || [],
+          declaration: resume.declaration || ''
         });
       }
     }

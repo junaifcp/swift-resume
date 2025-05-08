@@ -30,6 +30,17 @@ export type EducationItem = {
   description: string;
 };
 
+export type ProjectItem = {
+  id: string;
+  name: string;
+  role: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  bulletPoints: string[];
+  url?: string;
+};
+
 export type SkillItem = {
   id: string;
   name: string;
@@ -54,11 +65,13 @@ export type Resume = {
   themeColor: string;
   experiences: ExperienceItem[];
   education: EducationItem[];
+  projects: ProjectItem[];
   skills: SkillItem[];
   lastUpdated: string;
   templateId: Template;
   profileImage?: string;
-  strapiId?: number; // Added for Strapi integration
+  strapiId?: number;
+  declaration?: string; // Added declaration field which is optional
 };
 
 type ResumeContextType = {
@@ -84,6 +97,7 @@ const defaultResume: Resume = {
   themeColor: "#0EA5E9",
   experiences: [],
   education: [],
+  projects: [],
   skills: [],
   lastUpdated: "",
   templateId: "template-b",

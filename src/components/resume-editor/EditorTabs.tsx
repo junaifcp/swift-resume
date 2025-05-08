@@ -5,6 +5,8 @@ import BasicInfo from './BasicInfo';
 import Experience from './Experience';
 import Education from './Education';
 import Skills from './Skills';
+import Projects from './Projects';
+import Declaration from './Declaration';
 import FinalReview from './FinalReview';
 import ProfileImageUpload from './ProfileImageUpload';
 import { Resume } from '@/context/ResumeContext';
@@ -23,11 +25,13 @@ const EditorTabs = ({ resume, updateResume, activeTab, setActiveTab }: EditorTab
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="mb-8 grid grid-cols-5 w-full">
+      <TabsList className="mb-8 grid grid-cols-7 w-full">
         <TabsTrigger value="basic-info" className="text-xs md:text-sm">Basic Info</TabsTrigger>
         <TabsTrigger value="experience" className="text-xs md:text-sm">Experience</TabsTrigger>
         <TabsTrigger value="education" className="text-xs md:text-sm">Education</TabsTrigger>
+        <TabsTrigger value="projects" className="text-xs md:text-sm">Projects</TabsTrigger>
         <TabsTrigger value="skills" className="text-xs md:text-sm">Skills</TabsTrigger>
+        <TabsTrigger value="declaration" className="text-xs md:text-sm">Declaration</TabsTrigger>
         <TabsTrigger value="final" className="text-xs md:text-sm">Review</TabsTrigger>
       </TabsList>
       
@@ -52,9 +56,17 @@ const EditorTabs = ({ resume, updateResume, activeTab, setActiveTab }: EditorTab
         <TabsContent value="education" className="mt-0">
           <Education resume={resume} updateResume={updateResume} />
         </TabsContent>
+
+        <TabsContent value="projects" className="mt-0">
+          <Projects resume={resume} updateResume={updateResume} />
+        </TabsContent>
         
         <TabsContent value="skills" className="mt-0">
           <Skills resume={resume} updateResume={updateResume} />
+        </TabsContent>
+
+        <TabsContent value="declaration" className="mt-0">
+          <Declaration resume={resume} updateResume={updateResume} />
         </TabsContent>
         
         <TabsContent value="final" className="mt-0">

@@ -36,6 +36,7 @@ const convertToStrapiResume = (
     summary,
     themeColor,
     profileImage,
+    declaration,
     ...rest
   } = resume;
 
@@ -51,10 +52,12 @@ const convertToStrapiResume = (
       summary,
       themeColor,
       profileImage,
+      declaration,
     },
     sections: {
       experiences: resume.experiences,
       education: resume.education,
+      projects: resume.projects,
       skills: resume.skills,
     },
     ...(userId && { user: userId }),
@@ -64,7 +67,7 @@ const convertToStrapiResume = (
 // Convert Strapi Resume to frontend format
 const convertToFrontendResume = (strapiResume: any): Resume => {
   const { id, templateId, basicInfo, sections } = strapiResume;
-  const { experiences = [], education = [], skills = [] } = sections || {};
+  const { experiences = [], education = [], projects = [], skills = [] } = sections || {};
   const {
     name,
     title,
@@ -75,6 +78,7 @@ const convertToFrontendResume = (strapiResume: any): Resume => {
     summary,
     themeColor,
     profileImage,
+    declaration,
   } = basicInfo || {};
 
   return {
@@ -89,10 +93,13 @@ const convertToFrontendResume = (strapiResume: any): Resume => {
     summary: summary || "",
     themeColor: themeColor || "#0EA5E9",
     profileImage: profileImage || undefined,
+    declaration: declaration || "",
     experiences: experiences,
     education: education,
+    projects: projects || [],
     skills: skills,
     lastUpdated: new Date().toISOString(),
+    strapiId: id,
   };
 };
 
@@ -270,6 +277,8 @@ export const strapiService = {
           skills: [],
           lastUpdated: new Date().toISOString(),
           templateId: "template-b",
+          projects: [],
+          declaration: "",
         },
         {
           id: "resume-2",
@@ -287,6 +296,8 @@ export const strapiService = {
           skills: [],
           lastUpdated: new Date().toISOString(),
           templateId: "template-a",
+          projects: [],
+          declaration: "",
         },
       ];
     },

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Resume } from '@/context/ResumeContext';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -8,6 +9,60 @@ type ResumePreviewProps = {
 };
 
 const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
+  // Helper function to render Projects section that will be used in all templates 
+  const renderProjects = () => {
+    if (resume.projects.length === 0) return null;
+    
+    return (
+      <div className="mb-6">
+        <h2 className="text-lg font-bold mb-3 border-b pb-1" style={{ color: resume.themeColor }}>
+          Projects
+        </h2>
+        <div className="space-y-4">
+          {resume.projects.map((project) => (
+            <div key={project.id}>
+              <div className="flex justify-between mb-1">
+                <h3 className="font-medium">{project.name}</h3>
+                <span className="text-sm text-gray-600">{project.startDate} - {project.endDate}</span>
+              </div>
+              <p className="text-sm font-medium text-gray-600 mb-1">{project.role}</p>
+              {project.url && (
+                <p className="text-sm text-blue-500 mb-1">
+                  <a href={project.url} target="_blank" rel="noopener noreferrer">{project.url}</a>
+                </p>
+              )}
+              {project.description && <p className="text-sm mb-1">{project.description}</p>}
+              
+              {project.bulletPoints.length > 0 && (
+                <ul className="list-disc list-inside text-sm space-y-1 pl-1">
+                  {project.bulletPoints.map((point, idx) => (
+                    <li key={idx}>{point}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // Helper function to render Declaration section that will be used in all templates
+  const renderDeclaration = () => {
+    if (!resume.declaration) return null;
+    
+    return (
+      <div className="mt-6 pt-6 border-t">
+        <h2 className="text-lg font-bold mb-2" style={{ color: resume.themeColor }}>
+          Declaration
+        </h2>
+        <p className="text-sm">{resume.declaration}</p>
+      </div>
+    );
+  };
+
+  // Now use the two functions in each template
+
   const renderTemplateA = () => (
     <div id="resume-preview" className="relative w-full h-full flex flex-col">
       {/* Header with Profile Image */}
@@ -134,7 +189,7 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
 
           {/* Education */}
           {resume.education.length > 0 && (
-            <div>
+            <div className="mb-6">
               <h2 className="text-lg font-bold mb-3 border-b pb-1" style={{ color: resume.themeColor }}>
                 Education
               </h2>
@@ -154,6 +209,12 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
               </div>
             </div>
           )}
+
+          {/* Projects */}
+          {renderProjects()}
+
+          {/* Declaration */}
+          {renderDeclaration()}
         </div>
       </div>
     </div>
@@ -269,7 +330,7 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
 
           {/* Education */}
           {resume.education.length > 0 && (
-            <div>
+            <div className="mb-6">
               <h2 className="text-lg font-bold mb-3 border-b pb-1" style={{ color: resume.themeColor }}>
                 Education
               </h2>
@@ -289,6 +350,12 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
               </div>
             </div>
           )}
+
+          {/* Projects */}
+          {renderProjects()}
+
+          {/* Declaration */}
+          {renderDeclaration()}
         </div>
       </div>
     </div>
@@ -376,9 +443,12 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
           </div>
         )}
 
+        {/* Projects */}
+        {renderProjects()}
+
         {/* Skills */}
         {resume.skills.length > 0 && (
-          <div>
+          <div className="mb-6">
             <h2 className="text-lg font-bold mb-3 border-b pb-1" style={{ color: resume.themeColor }}>
               Skills
             </h2>
@@ -400,6 +470,9 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
             </div>
           </div>
         )}
+
+        {/* Declaration */}
+        {renderDeclaration()}
       </div>
     </div>
   );
@@ -484,9 +557,12 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
           </div>
         )}
 
+        {/* Projects */}
+        {renderProjects()}
+
         {/* Skills - Compact list */}
         {resume.skills.length > 0 && (
-          <div>
+          <div className="mb-6">
             <h2 className="text-lg font-bold mb-3 border-b pb-1">
               Skills
             </h2>
@@ -502,6 +578,9 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
             </div>
           </div>
         )}
+
+        {/* Declaration */}
+        {renderDeclaration()}
       </div>
     </div>
   );

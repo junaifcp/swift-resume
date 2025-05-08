@@ -37,6 +37,7 @@ const convertToStrapiResume = (
     themeColor,
     profileImage,
     declaration,
+    headerAlignment,
     ...rest
   } = resume;
 
@@ -53,6 +54,7 @@ const convertToStrapiResume = (
       themeColor,
       profileImage,
       declaration,
+      headerAlignment,
     },
     sections: {
       experiences: resume.experiences,
@@ -67,7 +69,12 @@ const convertToStrapiResume = (
 // Convert Strapi Resume to frontend format
 const convertToFrontendResume = (strapiResume: any): Resume => {
   const { id, templateId, basicInfo, sections } = strapiResume;
-  const { experiences = [], education = [], projects = [], skills = [] } = sections || {};
+  const {
+    experiences = [],
+    education = [],
+    projects = [],
+    skills = [],
+  } = sections || {};
   const {
     name,
     title,
@@ -79,6 +86,7 @@ const convertToFrontendResume = (strapiResume: any): Resume => {
     themeColor,
     profileImage,
     declaration,
+    headerAlignment,
   } = basicInfo || {};
 
   return {
@@ -94,6 +102,7 @@ const convertToFrontendResume = (strapiResume: any): Resume => {
     themeColor: themeColor || "#0EA5E9",
     profileImage: profileImage || undefined,
     declaration: declaration || "",
+    headerAlignment: headerAlignment || "left",
     experiences: experiences,
     education: education,
     projects: projects || [],
@@ -279,6 +288,7 @@ export const strapiService = {
           templateId: "template-b",
           projects: [],
           declaration: "",
+          headerAlignment: "left",
         },
         {
           id: "resume-2",
@@ -298,6 +308,7 @@ export const strapiService = {
           templateId: "template-a",
           projects: [],
           declaration: "",
+          headerAlignment: "left",
         },
       ];
     },

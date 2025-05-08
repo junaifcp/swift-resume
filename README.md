@@ -7,6 +7,14 @@ An AI-powered Resume Builder with Clerk authentication and Strapi backend persis
 
 **URL**: https://lovable.dev/projects/05983d66-a871-4036-bf60-8b6cb4bcf7d7
 
+## Responsive Design
+
+All pages are now responsive:
+- Navigation collapses to a hamburger menu at md breakpoint (768px)
+- Resume step buttons display icons-only on small screens and wrap horizontally 
+- Mobile-first approach ensures no horizontal scrolling on any screen size
+- Preview panel adapts to screen size with a toggle for mobile views
+
 ## Setup Instructions
 
 ### Environment Variables

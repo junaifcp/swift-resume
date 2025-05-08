@@ -16,7 +16,7 @@ const Declaration = ({ resume, updateResume }: DeclarationProps) => {
   };
 
   return (
-    <div>
+    <div className="max-w-full overflow-hidden">
       <Card>
         <CardHeader>
           <CardTitle className="text-xl font-bold">Declaration (Optional)</CardTitle>
@@ -36,6 +36,7 @@ const Declaration = ({ resume, updateResume }: DeclarationProps) => {
                 value={resume.declaration || ""}
                 onChange={handleDeclarationChange}
                 rows={5}
+                className="w-full"
               />
             </div>
           </div>

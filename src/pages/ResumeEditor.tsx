@@ -7,6 +7,7 @@ import EditorHeader from '@/components/resume-editor/EditorHeader';
 import EditorTabs from '@/components/resume-editor/EditorTabs';
 import PreviewPanel from '@/components/resume-editor/PreviewPanel';
 import MobilePreviewToggle from '@/components/resume-editor/MobilePreviewToggle';
+import Navigation from '@/components/Navigation';
 
 const ResumeEditor = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,12 +29,19 @@ const ResumeEditor = () => {
   } = useResumeEditor(id, navigate);
 
   if (!resumeData) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Navigation Header */}
+    <div className="min-h-screen flex flex-col overflow-x-hidden bg-background">
+      {/* Navigation */}
+      <Navigation />
+      
+      {/* Editor Header */}
       <EditorHeader 
         resumeName={resumeData.name}
         isDirty={isDirty}
@@ -48,9 +56,9 @@ const ResumeEditor = () => {
       />
 
       {/* Main Content */}
-      <div className={`flex h-[calc(100vh-73px)] overflow-hidden ${!showPreview && !isMobile ? 'justify-center' : ''}`}>
+      <div className={`flex flex-grow h-[calc(100vh-120px)] overflow-hidden ${!showPreview && !isMobile ? 'justify-center' : ''}`}>
         {/* Editor Panel */}
-        <div className={`${showPreview && !isMobile ? 'w-1/2' : 'w-full'} overflow-auto p-6 md:p-12`}>
+        <div className={`${showPreview && !isMobile ? 'w-full md:w-1/2' : 'w-full'} overflow-auto p-4 md:p-6 lg:p-12`}>
           <EditorTabs 
             resume={resumeData}
             updateResume={updateResume}

@@ -34,22 +34,25 @@ const EditorHeader = ({
   isMobile
 }: EditorHeaderProps) => {
   return (
-    <header className="py-4 px-6 md:px-12 flex justify-between items-center border-b bg-white">
-      <div className="flex items-center space-x-4">
+    <header className="py-3 px-4 md:px-6 lg:px-12 flex flex-wrap md:flex-nowrap gap-2 justify-between items-center border-b bg-white">
+      <div className="flex items-center space-x-2">
         <Link to="/dashboard" className="flex items-center text-sm font-medium hover:text-primary transition-colors">
           <ChevronLeft size={16} className="mr-1" />
-          <span>Back to Dashboard</span>
+          <span className="hidden xs:inline">Back</span>
+          <span className="hidden sm:inline"> to Dashboard</span>
         </Link>
-        <h1 className="font-mono text-lg md:text-xl font-bold hidden sm:block">
-          {resumeName}
-        </h1>
       </div>
-      <div className="flex gap-3">
+      
+      <h1 className="font-mono text-base md:text-lg lg:text-xl font-bold truncate max-w-[150px] sm:max-w-xs">
+        {resumeName}
+      </h1>
+      
+      <div className="flex gap-2 ml-auto">
         <Dialog open={templateDialogOpen} onOpenChange={setTemplateDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="flex items-center gap-1 px-2 sm:px-4">
               <FileText size={16} />
-              <span>Change Template</span>
+              <span className="hidden xs:inline">Template</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[600px]">
@@ -61,15 +64,15 @@ const EditorHeader = ({
         </Dialog>
 
         {!isMobile && (
-          <Button variant="outline" onClick={togglePreview} className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={togglePreview} className="flex items-center gap-1 px-2 sm:px-4">
             <Eye size={16} />
-            <span>{showPreview ? 'Hide Preview' : 'Show Preview'}</span>
+            <span className="hidden xs:inline">{showPreview ? 'Hide' : 'Show'} Preview</span>
           </Button>
         )}
         
-        <Button onClick={handleSaveChanges} disabled={!isDirty} className="flex items-center gap-2">
+        <Button onClick={handleSaveChanges} disabled={!isDirty} size="sm" className="flex items-center gap-1 px-2 sm:px-4">
           <Save size={16} />
-          <span>Save</span>
+          <span className="hidden xs:inline">Save</span>
         </Button>
       </div>
     </header>

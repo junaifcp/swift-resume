@@ -29,31 +29,33 @@ const App = () => {
         <TooltipProvider>
           <AuthProvider>
             <ResumeProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<LandingPage />} />
-                  <Route path="/sign-in" element={<SignInForm />} />
-                  <Route path="/sign-up" element={<SignUpForm />} />
-                  <Route path="/dashboard" element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/editor/:id" element={
-                    <ProtectedRoute>
-                      <ResumeEditor />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/preview/:id" element={
-                    <ProtectedRoute>
-                      <ResumePreview />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
+              <div className="overflow-x-hidden w-full min-h-screen">
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/sign-in" element={<SignInForm />} />
+                    <Route path="/sign-up" element={<SignUpForm />} />
+                    <Route path="/dashboard" element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/editor/:id" element={
+                      <ProtectedRoute>
+                        <ResumeEditor />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/preview/:id" element={
+                      <ProtectedRoute>
+                        <ResumePreview />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </BrowserRouter>
+              </div>
             </ResumeProvider>
           </AuthProvider>
         </TooltipProvider>

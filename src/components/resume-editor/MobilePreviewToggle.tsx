@@ -24,13 +24,15 @@ const MobilePreviewToggle = ({ showPreview, togglePreview }: MobilePreviewToggle
       </div>
       
       {/* Mobile Preview Panel Toggle */}
-      <Button
-        variant="outline"
-        className="absolute top-0 right-0 z-20 rounded-full h-10 w-10 p-0 mb-2"
-        onClick={togglePreview}
-      >
-        <ChevronLeft size={16} className={showPreview ? 'rotate-90' : '-rotate-90'} />
-      </Button>
+      {showPreview && (
+        <Button
+          variant="outline"
+          className="absolute top-2 right-2 z-20 rounded-full h-8 w-8 p-0"
+          onClick={togglePreview}
+        >
+          <ChevronLeft size={16} className="rotate-90" />
+        </Button>
+      )}
     </>
   );
 };

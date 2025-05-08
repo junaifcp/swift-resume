@@ -47,15 +47,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         setIsLoadingStrapi(true);
 
-        // Use real or mock service based on environment
+        // choose real or mock service
         const service = useMockMode ? strapiService.mock : strapiService;
 
-        // Try to fetch existing Strapi user
+        // try fetching by Clerk ID
         let existingStrapiUser = await service.getUserByClerkId(user.id);
 
-        // If user doesn't exist, create one
+        // if not found, attempt to create
         if (!existingStrapiUser) {
-          existingStrapiUser = await service.createUser({
+          const created = await service.createUser({
             clerkUserId: user.id,
             name:
               `${user.firstName} ${user.lastName}`.trim() ||
@@ -64,13 +64,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             email: user.primaryEmailAddress?.emailAddress || "",
           });
 
+          if (created) {
+            toast({
+              title: "Welcome!",
+              description: "Your account has been created successfully.",
+            });
+            existingStrapiUser = created;
+          }
+        }
+
+        // only proceed if we now have a valid Strapi user
+        if (existingStrapiUser) {
+          console.log("👉 Using Strapi AppUser ID:", existingStrapiUser.id);
+          setStrapiUser(existingStrapiUser);
+        } else {
+          // both fetch and create failed
           toast({
-            title: "Welcome!",
-            description: "Your account has been created successfully.",
+            title: "Error",
+            description: "Unable to fetch or create your Strapi user account.",
+            variant: "destructive",
           });
         }
-        console.log("👉 Using Strapi AppUser ID:", existingStrapiUser.id);
-        setStrapiUser(existingStrapiUser);
       } catch (error) {
         console.error("Error fetching/creating Strapi user:", error);
         toast({
@@ -96,11 +110,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const value = {
-    isAuthenticated: isSignedIn || false,
+  const value: AuthContextType = {
+    isAuthenticated: isSignedIn,
     isLoading: !isLoaded || isLoadingStrapi,
     strapiUser,
-    strapiUserId: strapiUser?.id || null,
+    strapiUserId: strapiUser?.id ?? null,
     signOut: handleSignOut,
   };
 

@@ -1,9 +1,7 @@
 import axios from "axios";
 import { Resume } from "@/context/ResumeContext";
 
-const API_URL =
-  import.meta.env.VITE_STRAPI_API_URL ||
-  "https://84cd-103-199-162-147.ngrok-free.app";
+const API_URL = import.meta.env.VITE_STRAPI_API_URL || "http://localhost:1337";
 
 // Types for Strapi data
 export interface StrapiUser {
@@ -136,12 +134,26 @@ export const strapiService = {
     name: string;
     email: string;
   }): Promise<StrapiUser | null> {
-    const res = await axios.post(`${API_URL}/api/app-users`, {
-      data: userData,
-    });
-    const record = res.data.data;
-    // record = { id: 5, attributes: { clerkUserId, name, email } }
-    return { id: record.id, ...record.attributes };
+    try {
+      const res = await axios.post(`${API_URL}/api/app-users`, {
+        data: userData,
+      });
+      const record = res.data.data;
+      return { id: record.id, ...record.attributes };
+    } catch (error: any) {
+      const err = error.response?.data?.error;
+      // If the only error is “clerkUserId must be unique,”
+      // re-call getUserByClerkId and return that instead:
+      if (
+        err?.name === "ValidationError" &&
+        err.details?.errors?.some((e: any) => e.path[0] === "clerkUserId")
+      ) {
+        console.warn("AppUser already exists, fetching it instead");
+        return this.getUserByClerkId(userData.clerkUserId);
+      }
+      console.error("Error creating AppUser:", err || error);
+      return null;
+    }
   },
   // async createUser(userData: {
   //   clerkUserId: string;

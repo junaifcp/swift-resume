@@ -56,7 +56,7 @@ export const useResumeEditor = (id: string | undefined, navigate: (path: string)
         });
       }
     }
-  }, [activeTab]);
+  }, [activeTab, getResumeById, id, isDirty, resumeData]);
 
   const updateResume = (data: Partial<Resume>) => {
     if (!resumeData) return;
@@ -66,14 +66,23 @@ export const useResumeEditor = (id: string | undefined, navigate: (path: string)
     setIsDirty(true);
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
     if (resumeData) {
-      saveResume(resumeData);
-      setIsDirty(false);
-      uiToast({
-        title: "Changes saved",
-        description: "Your resume has been updated successfully."
-      });
+      try {
+        await saveResume(resumeData);
+        setIsDirty(false);
+        uiToast({
+          title: "Changes saved",
+          description: "Your resume has been updated successfully."
+        });
+      } catch (error) {
+        console.error("Error saving resume:", error);
+        uiToast({
+          title: "Error saving",
+          description: "There was a problem saving your resume. Please try again.",
+          variant: "destructive"
+        });
+      }
     }
   };
 

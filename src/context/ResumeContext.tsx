@@ -1,3 +1,4 @@
+
 import {
   createContext,
   useContext,
@@ -171,15 +172,13 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
       // If authenticated, create resume in Strapi
       if (isAuthenticated && strapiUserId) {
         const service = useMockMode ? strapiService.mock : strapiService;
-        // Pass the strapiUserId as string to avoid type error
-        // const strapiResume = await service.createResume(newResume, String(strapiUserId));
-        const strapiResume = await service.createResume(
-          newResume,
-          strapiUserId
-        );
+        // Fixed TypeScript error by ensuring strapiUserId is a number
+        if (typeof strapiUserId === 'number') {
+          const strapiResume = await service.createResume(newResume, strapiUserId);
 
-        if (strapiResume) {
-          createdResume = strapiResume;
+          if (strapiResume) {
+            createdResume = strapiResume;
+          }
         }
       }
 
@@ -210,7 +209,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
         lastUpdated: new Date().toISOString(),
       };
 
-      // If authenticated, update in Strapi
+      // If authenticated and resume has strapiId, update in Strapi
       if (isAuthenticated && strapiUserId && resumeData.strapiId) {
         const service = useMockMode ? strapiService.mock : strapiService;
         const strapiResume = await service.updateResume(
@@ -221,6 +220,16 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
         if (strapiResume) {
           updatedResume = strapiResume;
         }
+      } else if (isAuthenticated && strapiUserId && !resumeData.strapiId) {
+        // If the resume doesn't have a strapiId yet but user is authenticated, create it in Strapi
+        const service = useMockMode ? strapiService.mock : strapiService;
+        // Fixed TypeScript error by ensuring strapiUserId is a number
+        if (typeof strapiUserId === 'number') {
+          const strapiResume = await service.createResume(resumeData, strapiUserId);
+          if (strapiResume) {
+            updatedResume = strapiResume;
+          }
+        }
       }
 
       const updatedResumes = resumes.map((resume) =>
@@ -229,6 +238,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
 
       setResumes(updatedResumes);
       saveResumesToStorage(updatedResumes);
+      toast.success("Resume saved successfully");
     } catch (error) {
       console.error("Error updating resume:", error);
       toast.error("Failed to save changes. Please try again.");

@@ -1,14 +1,16 @@
-
-import React from 'react';
-import { Check } from 'lucide-react';
-import { Template } from '@/context/ResumeContext';
+import React from "react";
+import { Check } from "lucide-react";
+import { Template } from "@/context/ResumeContext";
 
 type TemplateChooserProps = {
   selectedTemplate: Template;
   onSelectTemplate: (template: Template) => void;
 };
 
-const TemplateChooser = ({ selectedTemplate, onSelectTemplate }: TemplateChooserProps) => {
+const TemplateChooser = ({
+  selectedTemplate,
+  onSelectTemplate,
+}: TemplateChooserProps) => {
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-medium">Choose a Template</h3>
@@ -17,13 +19,15 @@ const TemplateChooser = ({ selectedTemplate, onSelectTemplate }: TemplateChooser
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div 
+        <div
           className={`relative border-2 rounded-md overflow-hidden cursor-pointer hover:border-primary transition-all ${
-            selectedTemplate === 'template-a' ? 'border-primary ring-2 ring-primary/20' : 'border-gray-200'
+            selectedTemplate === "template-a"
+              ? "border-primary ring-2 ring-primary/20"
+              : "border-gray-200"
           }`}
-          onClick={() => onSelectTemplate('template-a')}
+          onClick={() => onSelectTemplate("template-a")}
         >
-          {selectedTemplate === 'template-a' && (
+          {selectedTemplate === "template-a" && (
             <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1">
               <Check size={16} />
             </div>
@@ -50,13 +54,15 @@ const TemplateChooser = ({ selectedTemplate, onSelectTemplate }: TemplateChooser
           </div>
         </div>
 
-        <div 
+        <div
           className={`relative border-2 rounded-md overflow-hidden cursor-pointer hover:border-primary transition-all ${
-            selectedTemplate === 'template-b' ? 'border-primary ring-2 ring-primary/20' : 'border-gray-200'
+            selectedTemplate === "template-b"
+              ? "border-primary ring-2 ring-primary/20"
+              : "border-gray-200"
           }`}
-          onClick={() => onSelectTemplate('template-b')}
+          onClick={() => onSelectTemplate("template-b")}
         >
-          {selectedTemplate === 'template-b' && (
+          {selectedTemplate === "template-b" && (
             <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1">
               <Check size={16} />
             </div>
@@ -80,13 +86,15 @@ const TemplateChooser = ({ selectedTemplate, onSelectTemplate }: TemplateChooser
           </div>
         </div>
 
-        <div 
+        <div
           className={`relative border-2 rounded-md overflow-hidden cursor-pointer hover:border-primary transition-all ${
-            selectedTemplate === 'template-c' ? 'border-primary ring-2 ring-primary/20' : 'border-gray-200'
+            selectedTemplate === "template-c"
+              ? "border-primary ring-2 ring-primary/20"
+              : "border-gray-200"
           }`}
-          onClick={() => onSelectTemplate('template-c')}
+          onClick={() => onSelectTemplate("template-c")}
         >
-          {selectedTemplate === 'template-c' && (
+          {selectedTemplate === "template-c" && (
             <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1">
               <Check size={16} />
             </div>
@@ -110,13 +118,15 @@ const TemplateChooser = ({ selectedTemplate, onSelectTemplate }: TemplateChooser
           </div>
         </div>
 
-        <div 
+        <div
           className={`relative border-2 rounded-md overflow-hidden cursor-pointer hover:border-primary transition-all ${
-            selectedTemplate === 'template-d' ? 'border-primary ring-2 ring-primary/20' : 'border-gray-200'
+            selectedTemplate === "template-d"
+              ? "border-primary ring-2 ring-primary/20"
+              : "border-gray-200"
           }`}
-          onClick={() => onSelectTemplate('template-d')}
+          onClick={() => onSelectTemplate("template-d")}
         >
-          {selectedTemplate === 'template-d' && (
+          {selectedTemplate === "template-d" && (
             <div className="absolute top-2 right-2 bg-primary text-white rounded-full p-1">
               <Check size={16} />
             </div>

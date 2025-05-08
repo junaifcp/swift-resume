@@ -1,20 +1,26 @@
 
 import React from 'react';
-import { Resume } from '@/context/ResumeContext';
+import { Resume, HeaderAlignment } from '@/context/ResumeContext';
 import ResumePreview from './ResumePreview';
 import MobilePreviewToggle from './MobilePreviewToggle';
+import HeaderAlignmentControl from './HeaderAlignmentControl';
 
 type PreviewPanelProps = {
   resume: Resume;
   showPreview: boolean;
   togglePreview: () => void;
   isMobile: boolean;
+  updateResume: (data: Partial<Resume>) => void;
 };
 
-const PreviewPanel = ({ resume, showPreview, togglePreview, isMobile }: PreviewPanelProps) => {
+const PreviewPanel = ({ resume, showPreview, togglePreview, isMobile, updateResume }: PreviewPanelProps) => {
   if (!showPreview && !isMobile) {
     return null;
   }
+  
+  const handleAlignmentChange = (headerAlignment: HeaderAlignment) => {
+    updateResume({ headerAlignment });
+  };
   
   return (
     <div 
@@ -48,6 +54,14 @@ const PreviewPanel = ({ resume, showPreview, togglePreview, isMobile }: PreviewP
                 : 'Template D (Plain)'}
             </span>
           </div>
+          
+          <div className="mb-6 space-y-4">
+            <HeaderAlignmentControl 
+              value={resume.headerAlignment || 'left'} 
+              onChange={handleAlignmentChange} 
+            />
+          </div>
+          
           <div className="animate-fade-in">
             <ResumePreview resume={resume} />
           </div>

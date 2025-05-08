@@ -9,6 +9,16 @@ type ResumePreviewProps = {
 };
 
 const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
+  // Get alignment class based on header alignment setting
+  const getAlignmentClass = () => {
+    switch (resume.headerAlignment || 'left') {
+      case 'left': return 'text-left';
+      case 'center': return 'text-center';
+      case 'right': return 'text-right';
+      default: return 'text-left';
+    }
+  };
+
   // Helper function to render Projects section that will be used in all templates 
   const renderProjects = () => {
     if (resume.projects.length === 0) return null;
@@ -66,16 +76,16 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
   const renderTemplateA = () => (
     <div id="resume-preview" className="relative w-full h-full flex flex-col">
       {/* Header with Profile Image */}
-      <div style={{ backgroundColor: resume.themeColor }} className="px-6 py-6 text-white flex items-center">
+      <div style={{ backgroundColor: resume.themeColor }} className={`px-6 py-6 text-white flex items-center ${getAlignmentClass()}`}>
         {resume.profileImage ? (
-          <Avatar className="w-16 h-16 mr-4 border-2 border-white/50">
+          <Avatar className={`w-16 h-16 mr-4 border-2 border-white/50 ${resume.headerAlignment === 'center' ? 'mx-auto' : resume.headerAlignment === 'right' ? 'ml-auto' : ''}`}>
             <AvatarImage src={resume.profileImage} alt={resume.name} />
             <AvatarFallback className="bg-white/30">
               {resume.name?.charAt(0) || '?'}
             </AvatarFallback>
           </Avatar>
         ) : (
-          <Avatar className="w-16 h-16 mr-4 border-2 border-white/50">
+          <Avatar className={`w-16 h-16 mr-4 border-2 border-white/50 ${resume.headerAlignment === 'center' ? 'mx-auto' : resume.headerAlignment === 'right' ? 'ml-auto' : ''}`}>
             <AvatarFallback className="bg-white/30 text-white">
               {resume.name?.charAt(0) || '?'}
             </AvatarFallback>
@@ -223,7 +233,7 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
   const renderTemplateB = () => (
     <div id="resume-preview" className="relative w-full h-full flex flex-col">
       {/* Header */}
-      <div style={{ backgroundColor: resume.themeColor }} className="px-6 py-8 text-white">
+      <div style={{ backgroundColor: resume.themeColor }} className={`px-6 py-8 text-white ${getAlignmentClass()}`}>
         <h1 className="text-2xl font-mono font-bold mb-1">{resume.name || 'Your Name'}</h1>
         <p className="text-lg opacity-90">{resume.title || 'Professional Title'}</p>
       </div>
@@ -364,7 +374,7 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
   const renderTemplateC = () => (
     <div id="resume-preview" className="relative w-full h-full flex flex-col">
       {/* Header - ATS Friendly */}
-      <div style={{ backgroundColor: resume.themeColor }} className="px-6 py-8 text-white">
+      <div style={{ backgroundColor: resume.themeColor }} className={`px-6 py-8 text-white ${getAlignmentClass()}`}>
         <h1 className="text-2xl font-mono font-bold mb-1">{resume.name || 'Your Name'}</h1>
         <p className="text-lg opacity-90">{resume.title || 'Professional Title'}</p>
       </div>
@@ -480,12 +490,12 @@ const ResumePreview = ({ resume, className }: ResumePreviewProps) => {
   const renderTemplateD = () => (
     <div id="resume-preview" className="relative w-full h-full flex flex-col">
       {/* Minimalist header */}
-      <div className="px-6 py-8 border-b">
+      <div className={`px-6 py-8 border-b ${getAlignmentClass()}`}>
         <h1 className="text-2xl font-mono font-bold mb-1">{resume.name || 'Your Name'}</h1>
         <p className="text-lg text-gray-600">{resume.title || 'Professional Title'}</p>
         
         {/* Inline contact info */}
-        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600">
+        <div className={`mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600 ${resume.headerAlignment === 'center' ? 'justify-center' : resume.headerAlignment === 'right' ? 'justify-end' : 'justify-start'}`}>
           {resume.email && <span>{resume.email}</span>}
           {resume.phone && <span>{resume.phone}</span>}
           {resume.location && <span>{resume.location}</span>}

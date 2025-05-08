@@ -16,7 +16,8 @@ const PreviewPage = () => {
   const resumeWithTemplate = getResumeById(id || '');
   const [resume, setResume] = useState(resumeWithTemplate ? {
     ...resumeWithTemplate,
-    templateId: resumeWithTemplate.templateId || 'template-b'
+    templateId: resumeWithTemplate.templateId || 'template-b',
+    headerAlignment: resumeWithTemplate.headerAlignment || 'left'
   } : undefined);
   const { exportToPdf, isExporting } = usePdfExport();
 
@@ -33,10 +34,11 @@ const PreviewPage = () => {
       return;
     }
 
-    // Ensure templateId exists
+    // Ensure templateId and headerAlignment exist
     setResume({
       ...resumeData,
-      templateId: resumeData.templateId || 'template-b'
+      templateId: resumeData.templateId || 'template-b',
+      headerAlignment: resumeData.headerAlignment || 'left'
     });
   }, [id, getResumeById, navigate]);
 

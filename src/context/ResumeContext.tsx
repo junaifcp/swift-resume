@@ -1,4 +1,3 @@
-
 import {
   createContext,
   useContext,
@@ -53,6 +52,8 @@ export type Template =
   | "template-c"
   | "template-d";
 
+export type HeaderAlignment = "left" | "center" | "right";
+
 export type Resume = {
   id: string;
   name: string;
@@ -69,6 +70,7 @@ export type Resume = {
   skills: SkillItem[];
   lastUpdated: string;
   templateId: Template;
+  headerAlignment: HeaderAlignment;
   profileImage?: string;
   strapiId?: number;
   declaration?: string; // Added declaration field which is optional
@@ -101,6 +103,7 @@ const defaultResume: Resume = {
   skills: [],
   lastUpdated: "",
   templateId: "template-b",
+  headerAlignment: "left", // Default to left alignment
 };
 
 const ResumeContext = createContext<ResumeContextType>({

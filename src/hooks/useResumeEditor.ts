@@ -12,11 +12,12 @@ export const useResumeEditor = (id: string | undefined, navigate: (path: string)
   const { toast: uiToast } = useToast();
   const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
   
-  // If templateId is missing in the resume data, default to template-b
+  // If templateId or headerAlignment is missing in the resume data, use defaults
   const resumeWithTemplate = getResumeById(id || '');
   const [resumeData, setResumeData] = useState(resumeWithTemplate ? {
     ...resumeWithTemplate,
     templateId: resumeWithTemplate.templateId || 'template-b',
+    headerAlignment: resumeWithTemplate.headerAlignment || 'left',
     projects: resumeWithTemplate.projects || [],
     declaration: resumeWithTemplate.declaration || ''
   } : undefined);
@@ -41,6 +42,7 @@ export const useResumeEditor = (id: string | undefined, navigate: (path: string)
     const resumeWithDefaults = {
       ...resume,
       templateId: resume.templateId || 'template-b',
+      headerAlignment: resume.headerAlignment || 'left',
       projects: resume.projects || [],
       declaration: resume.declaration || ''
     };
@@ -57,6 +59,7 @@ export const useResumeEditor = (id: string | undefined, navigate: (path: string)
         setResumeData({
           ...resume,
           templateId: resume.templateId || 'template-b',
+          headerAlignment: resume.headerAlignment || 'left',
           projects: resume.projects || [],
           declaration: resume.declaration || ''
         });

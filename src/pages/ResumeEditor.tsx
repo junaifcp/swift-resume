@@ -73,6 +73,7 @@ const ResumeEditor = () => {
           showPreview={showPreview}
           togglePreview={togglePreview}
           isMobile={isMobile}
+          updateResume={updateResume}
         />
       </div>
 

@@ -1,12 +1,11 @@
-
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, Save, Eye, FileText } from 'lucide-react';
-import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
-import TemplateChooser from './TemplateChooser';
-import { Template } from '@/context/ResumeContext';
-import { toast } from 'sonner';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, Save, Eye, FileText } from "lucide-react";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
+import TemplateChooser from "./TemplateChooser";
+import { Template } from "@/context/ResumeContext";
+import { toast } from "sonner";
 
 type EditorHeaderProps = {
   resumeName: string;
@@ -31,46 +30,71 @@ const EditorHeader = ({
   setTemplateDialogOpen,
   selectedTemplate,
   handleTemplateChange,
-  isMobile
+  isMobile,
 }: EditorHeaderProps) => {
   return (
     <header className="py-3 px-4 md:px-6 lg:px-12 flex flex-wrap md:flex-nowrap gap-2 justify-between items-center border-b bg-white">
       <div className="flex items-center space-x-2">
-        <Link to="/dashboard" className="flex items-center text-sm font-medium hover:text-primary transition-colors">
+        <Link
+          to="/dashboard"
+          className="flex items-center text-sm font-medium hover:text-primary transition-colors"
+        >
           <ChevronLeft size={16} className="mr-1" />
           <span className="hidden xs:inline">Back</span>
           <span className="hidden sm:inline"> to Dashboard</span>
         </Link>
       </div>
-      
+
       <h1 className="font-mono text-base md:text-lg lg:text-xl font-bold truncate max-w-[150px] sm:max-w-xs">
         {resumeName}
       </h1>
-      
+
       <div className="flex gap-2 ml-auto">
         <Dialog open={templateDialogOpen} onOpenChange={setTemplateDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline" size="sm" className="flex items-center gap-1 px-2 sm:px-4">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-1 px-2 sm:px-4"
+            >
               <FileText size={16} />
               <span className="hidden xs:inline">Template</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
-            <TemplateChooser 
-              selectedTemplate={selectedTemplate} 
-              onSelectTemplate={handleTemplateChange} 
-            />
+          <DialogContent className="sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1000px]">
+            {/* Add this wrapper for scrolling */}
+            <div className="max-h-[80vh] overflow-y-auto p-1 pr-2">
+              <TemplateChooser
+                selectedTemplate={selectedTemplate}
+                onSelectTemplate={(template) => {
+                  handleTemplateChange(template);
+                  setTemplateDialogOpen(false); // Pro-tip: Close dialog on selection
+                }}
+              />
+            </div>
           </DialogContent>
         </Dialog>
 
         {!isMobile && (
-          <Button variant="outline" size="sm" onClick={togglePreview} className="flex items-center gap-1 px-2 sm:px-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={togglePreview}
+            className="flex items-center gap-1 px-2 sm:px-4"
+          >
             <Eye size={16} />
-            <span className="hidden xs:inline">{showPreview ? 'Hide' : 'Show'} Preview</span>
+            <span className="hidden xs:inline">
+              {showPreview ? "Hide" : "Show"} Preview
+            </span>
           </Button>
         )}
-        
-        <Button onClick={handleSaveChanges} disabled={!isDirty} size="sm" className="flex items-center gap-1 px-2 sm:px-4">
+
+        <Button
+          onClick={handleSaveChanges}
+          disabled={!isDirty}
+          size="sm"
+          className="flex items-center gap-1 px-2 sm:px-4"
+        >
           <Save size={16} />
           <span className="hidden xs:inline">Save</span>
         </Button>
